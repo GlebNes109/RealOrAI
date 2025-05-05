@@ -1,12 +1,11 @@
 import uuid
-from select import select
-
 from sqlalchemy import create_engine
-from sqlmodel import SQLModel, Session
+from sqlalchemy.exc import IntegrityError
+from sqlmodel import SQLModel, Session, select
 
-from src.config import settings
-from src.models.db_models import UsersDB
-from src.utility_services import create_hash
+from app.src.config import settings
+from app.src.repository.db_models import UsersDB
+from app.src.utility_services import create_hash
 
 DATABASE_URL = f"postgresql://{settings.postgres_username}:{settings.postgres_password}@{settings.postgres_host}:{settings.postgres_port}/{settings.postgres_database}"
 engine = create_engine(DATABASE_URL)
@@ -32,18 +31,33 @@ class Repository:
                     id=user_id,
                     login=settings.admin_login,
                     password_hash=create_hash(settings.admin_password),
-                    role="SUPER_ADMIN"
+                    role="SUPER_ADMIN",
+                    score=0,
                 )
                 session.merge(user_db)
                 session.commit()
 
     def add_user(self, login, password):
-        with Session(engine) as session:
-            user_db = UsersDB(
-                id=str(uuid.uuid4()),
-                login=login,
-                password_hash=create_hash(password)
-            )
+        try:
+            with Session(engine) as session:
+                user_db = UsersDB(
+                    id=str(uuid.uuid4()),
+                    login=login,
+                    password_hash=create_hash(password),
+                    score=0
+                )
 
-            session.add(user_db)
-            session.commit()
+                session.add(user_db)
+                session.commit()
+                return True
+        except IntegrityError:
+            return False
+
+    def check_user(self, login, password):
+        with Session(engine) as session:
+            query = select(UsersDB).where(UsersDB.login == login, UsersDB.password_hash == create_hash(password))
+            user_db = session.exec(query).first()
+            if user_db:
+                return True
+            else:
+                return False

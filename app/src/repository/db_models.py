@@ -10,8 +10,14 @@ class Role(str, Enum):
     SUPER_ADMIN = "SUPER_ADMIN"
 
 class UsersDB(SQLModel, table=True):
-    __table_args__ = {"extend_existing": True}
     id: str = Field(primary_key=True)
     login: str = Field(unique=True)
     password_hash: str
     role: Optional[Role] = Role.USER
+    score: int
+
+class CardsDB(SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    content: str
+    is_ai: bool
+    user_id: str
