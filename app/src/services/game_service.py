@@ -11,47 +11,41 @@ api = ApiService()
 repository = Repository()
 class GameService():
     def generate_new_game(self):
-        # id картинок хранятся в сессии, но правильный ответ для каждой картинки хранится в базе. Сами картинки хранятся в static/user_data/
         game_cards_id = []
-        for i in range(3):
-            time.sleep(1)
-            '''a = random.randint(0, 1)
-            if a == 0:
-                id = api.get_real_image()
-                card_db = CardsDB(
-                    id=id,
-                    corr_answer=Answer.REAL
-                )
-                repository.create_new_card(card_db)
-                game_cards_id.append(id)
 
-            if a == 211:
-                id = api.get_ai_image()
-                card_db = CardsDB(
-                    id=id,
-                    corr_answer=Answer.AI
-                )
-                repository.create_new_card(card_db)
-                game_cards_id.append(id)
+        # 5 случайных карточек из базы
+        existing_cards = repository.get_random_cards(5)
+        if existing_cards:
+            game_cards_id.extend([card.id for card in existing_cards])
 
-            if a == 1:
-                random_card = repository.get_random_card()
-                id = random_card.id
-                game_cards_id.append(id)
-
-            if 1 == 1:
-                random_card = repository.get_random_card()
-                id = random_card.id
-                game_cards_id.append(id)'''
-
+        # 3 новых реальных изображения
+        for _ in range(3):
+            time.sleep(1)  # Перерыв между запросами
             id = api.get_real_image()
             card_db = CardsDB(
                 id=id,
                 corr_answer=Answer.REAL
             )
-            repository.create_new_card(card_db)
-            game_cards_id.append(id)
+            if card_db.id:
+                repository.create_new_card(card_db)
+                game_cards_id.append(id)
 
+        # 2 изображения из нейросети
+        for _ in range(0):
+            time.sleep(1)
+            id = api.get_ai_image()
+            card_db = CardsDB(
+                id=id,
+                corr_answer=Answer.AI
+            )
+            if card_db.id:
+                repository.create_new_card(card_db)
+                game_cards_id.append(id)
+
+        #  рандомное перемешивание
+        random.shuffle(game_cards_id)
+
+        # в сессии только id карточек - текущая игра
         session['game_cards'] = game_cards_id
         session['current_index'] = 0
         session['correct_answers'] = 0

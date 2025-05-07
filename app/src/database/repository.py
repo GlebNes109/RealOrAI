@@ -76,11 +76,15 @@ class Repository:
             session.add(card_db)
             session.commit()
 
-    def get_random_card(self):
+    def get_random_cards(self, cards):
         with Session(engine) as session:
-            query = select(CardsDB).order_by(func.random()).limit(1)
-            user_db = session.exec(query).first()
-            return user_db
+            users_db = []
+            for i in range(cards):
+                query = select(CardsDB).order_by(func.random()).limit(1)
+                user_db = session.exec(query).first()
+                if user_db:
+                    users_db.append(user_db)
+            return users_db
 
     def get_card_by_id(self, card_id):
         with Session(engine) as session:

@@ -10,14 +10,22 @@ from app.src.services.game_service import GameService
 
 repository = Repository()
 game_service = GameService()
-@game_bp.route('/game/new') # генерация новой игры
-def new_game():
+
+@game_bp.route('/game/loading')
+def game_loading():
+    return render_template('loading.html')
+
+@game_bp.route('/game/new/start')  # генерация новой игры через AJAX - чтобы отображать загрузочную анимацию
+def start_new_game():
     if 'user_id' in session:
         user_id = session['user_id']
-        # user_db = repository.get_user_by_id(user_id)
         game_service.generate_new_game()
-        return redirect(url_for('game_bp.game_question'))
-    return redirect(url_for('auth_bp.signin'))
+        return jsonify({'status': 'success', 'redirect': url_for('game_bp.game_question')})
+    return jsonify({'status': 'error', 'redirect': url_for('auth_bp.signin')})
+
+@game_bp.route('/game/new')  # Редирект на страницу загрузки
+def new_game():
+    return redirect(url_for('game_bp.game_loading'))
 
 @game_bp.route('/game/question')
 def game_question():
@@ -34,17 +42,17 @@ def game_question():
 @game_bp.route('/game/answer', methods=['POST'])
 def game_answer():
     print(request.data)
-    try:
-        data = request.get_json()
-        user_answer = data.get('answer')
-        is_correct = game_service.check_answer(user_answer)
-        response = {
-            "message": "Правильно!" if is_correct else "Неправильно!",
-            "is_correct": is_correct
-        }
-        return jsonify(response), 200
-    except Exception as e:
-        return jsonify({"message": f"Ошибка сервера: {str(e)}", "is_correct": False}), 500
+    # try:
+    data = request.get_json()
+    user_answer = data.get('answer')
+    is_correct = game_service.check_answer(user_answer)
+    response = {
+        "message": "Правильно!" if is_correct else "Неправильно!",
+        "is_correct": is_correct
+    }
+    return jsonify(response), 200
+    # except Exception as e:
+        # return jsonify({"message": f"Ошибка сервера: {str(e)}", "is_correct": False}), 500
 
 @game_bp.route('/game/result')
 def game_result():

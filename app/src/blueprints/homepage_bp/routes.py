@@ -10,5 +10,7 @@ def home():
     if 'user_id' in session:
         user_id = session['user_id']
         user_db = repository.get_user_by_id(user_id)
+        if not user_db:
+            return redirect(url_for('auth_bp.signin'))
         return render_template('homepage.html', login=user_db.login)
     return redirect(url_for('auth_bp.signin'))
