@@ -23,5 +23,10 @@ app.register_blueprint(game_bp)
 def user_data(filename):
     return send_from_directory('static/user_data', filename)
 
+"""@app.after_request
+def add_csrf_token(response):
+    response.headers['X-CSRF-Token'] = csrf.generate_csrf()
+    return response"""
+
 if __name__ == '__main__':
     app.run(port=settings.server_port, host=settings.server_host)

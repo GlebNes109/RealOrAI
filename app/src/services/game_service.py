@@ -13,7 +13,7 @@ class GameService():
     def generate_new_game(self):
         # id картинок хранятся в сессии, но правильный ответ для каждой картинки хранится в базе. Сами картинки хранятся в static/user_data/
         game_cards_id = []
-        for i in range(5):
+        for i in range(3):
             time.sleep(1)
             '''a = random.randint(0, 1)
             if a == 0:

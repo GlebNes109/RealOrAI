@@ -1,6 +1,7 @@
+import time
 from pathlib import Path
 
-from flask import session, render_template, redirect, url_for, request
+from flask import session, render_template, redirect, url_for, request, flash, jsonify
 
 from app.src.blueprints.game_bp.forms import AnswerForm
 from app.src.database.repository import Repository
@@ -30,13 +31,24 @@ def game_question():
     else:
         return redirect(url_for('game_bp.game_result'))
 
-@game_bp.route('/game/answer', methods=['POST', 'GET'])
+@game_bp.route('/game/answer', methods=['POST'])
 def game_answer():
-    user_answer = request.form.get('answer')
-    is_correct = game_service.check_answer(user_answer)
-    return redirect(url_for('game_bp.game_question'))
+    print(request.data)
+    try:
+        data = request.get_json()
+        user_answer = data.get('answer')
+        is_correct = game_service.check_answer(user_answer)
+        response = {
+            "message": "Правильно!" if is_correct else "Неправильно!",
+            "is_correct": is_correct
+        }
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({"message": f"Ошибка сервера: {str(e)}", "is_correct": False}), 500
 
 @game_bp.route('/game/result')
 def game_result():
     correct = session.get('correct_answers', 0)
-    return render_template('result.html', correct=correct)
+    incorrect = len(session.get('game_cards')) - correct
+    total_questions = len(session.get('game_cards'))
+    return render_template('result.html', correct=correct, incorrect=incorrect, total_questions=total_questions)

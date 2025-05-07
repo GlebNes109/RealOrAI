@@ -36,7 +36,9 @@ class ApiService:
             "Accept-Language": "en-US,en;q=0.9",
             "Referer": "https://picsum.photos/"
         }
-        url = "https://picsum.photos/600/700"
+        w = random.randint(300, 900)
+        h = random.randint(300, 900)
+        url = f"https://picsum.photos/{w}/{h}"
 
         response = requests.get(url, headers=headers, proxies=proxies, timeout=5)
         if response.status_code == 200:
