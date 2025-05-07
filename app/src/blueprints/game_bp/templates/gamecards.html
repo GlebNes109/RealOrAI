@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Угадай изображение</title>
+</head>
+<body>
+    <h1>Угадай: реальное изображение или ИИ?</h1>
+    <img src="{{ image_path }}" alt="Изображение" width="300">
+    <form action="{{ url_for('game_bp.game_answer') }}" method="post">
+        {{ form.hidden_tag() }}
+        <button type="submit" name="answer" value="REAL">Реальное</button>
+        <button type="submit" name="answer" value="AI">ИИ</button>
+    </form>
+</body>
+</html>

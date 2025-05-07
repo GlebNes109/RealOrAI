@@ -9,6 +9,10 @@ class Role(str, Enum):
     ADMIN = "ADMIN"
     SUPER_ADMIN = "SUPER_ADMIN"
 
+class Answer(str, Enum):
+    AI = "AI"
+    REAL = "REAL"
+
 class UsersDB(SQLModel, table=True):
     id: str = Field(primary_key=True)
     login: str = Field(unique=True)
@@ -18,6 +22,5 @@ class UsersDB(SQLModel, table=True):
 
 class CardsDB(SQLModel, table=True):
     id: str = Field(primary_key=True)
-    content: str
-    is_ai: bool
-    user_id: str
+    corr_answer: Answer
+    # game_id: str'''

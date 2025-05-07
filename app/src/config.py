@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     admins: list[str]
     server_host: str
     server_port: str
+    yandex_api_token: str
     class Config:
         env_file = ".env"
 

@@ -16,7 +16,8 @@
             <p class="text-center">Это ваша главная страница.</p>
             <div class="d-flex justify-content-around">
               <a class="btn btn-warning">Изменить настройки</a>
-              <a class="btn btn-danger">Выйти</a>
+              <a href="{{ url_for('auth_bp.logout') }}" class="btn btn-danger">Выйти</a>
+              <a href="{{ url_for('game_bp.new_game') }}" class="btn btn-primary">Новая игра</a>
             </div>
           </div>
         </div>
