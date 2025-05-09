@@ -16,7 +16,7 @@ class Repository:
         try:
             # SQLModel.metadata.drop_all(engine)
             SQLModel.metadata.create_all(engine)
-            self.add_super_admin()
+            self.add_super_admin() # супер админ создается в самом начале
 
         except Exception as e:
             print(e)
@@ -32,7 +32,7 @@ class Repository:
                     login=settings.admin_login,
                     password_hash=create_hash(settings.admin_password),
                     role="SUPER_ADMIN",
-                    score=0,
+                    rating=1500,
                 )
                 session.merge(user_db)
                 session.commit()
@@ -44,7 +44,7 @@ class Repository:
                     id=str(uuid.uuid4()),
                     login=login,
                     password_hash=create_hash(password),
-                    score=0
+                    rating=1500
                 )
 
                 session.add(user_db)
@@ -91,3 +91,11 @@ class Repository:
             query = select(CardsDB).where(CardsDB.id == card_id)
             card_db = session.exec(query).first()
             return card_db
+
+    def set_raiting(self, user_id, R_new):
+        with Session(engine) as session:
+            query = select(UsersDB).where(UsersDB.id == user_id)
+            user_db = session.exec(query).first()
+            user_db.rating = R_new
+            session.commit()
+            session.refresh(user_db)

@@ -78,4 +78,16 @@ class GameService():
         session['current_index'] += 1
         return is_correct
 
+    def update_rating(self, correct, incorrect, total, user_id):
+        # Подсчет рейтинга по системе эло.
+        # Соперника здесь нет, поэтому рейтинг соперника считается как 1500 (базовый рейтинг)
+        R_game = 1500
+        user_db = repository.get_user_by_id(user_id)
+        R = user_db.rating
+        S = correct / total
+        K = 45 # коэфф изменения рейтинга, ставлю побольше чтобы было интереснее
+        E = 1 / (1 + 10 ** ((R_game - R) / 400))
+        R_new = round(R + K * (S - E))
+        repository.set_raiting(user_id, R_new)
+        return R, R_new # для отображения в results страничке (насколько упал/вырос)
 

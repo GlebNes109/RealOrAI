@@ -19,14 +19,11 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(home_bp)
 app.register_blueprint(game_bp)
 
-@app.route('/user_data/<filename>')
+@app.route('/user_data/<filename>') # эндпоинт для получения файлов (изображений)
+# изображения много весят, поэтому не хранятся в бд. В бд хранится только запись о них (айди и корректный ответ)
 def user_data(filename):
     return send_from_directory('static/user_data', filename)
 
-"""@app.after_request
-def add_csrf_token(response):
-    response.headers['X-CSRF-Token'] = csrf.generate_csrf()
-    return response"""
 
 if __name__ == '__main__':
     app.run(port=settings.server_port, host=settings.server_host)

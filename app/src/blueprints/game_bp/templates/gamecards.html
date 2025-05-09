@@ -13,18 +13,12 @@
                 <h2>Реальное изображение или ИИ?</h2>
             </div>
             <div class="card-body text-center">
+            <img id="game-image" src="{{ image_path }}" alt="Изображение" class="img-fluid mb-3" style="width: 70%; height: auto;">
                 <div class="alert d-none" id="result-message" role="alert"></div>
-
-                <img id="game-image" src="{{ image_path }}" alt="Изображение" class="img-fluid mb-3">
-
                 <div class="d-flex" style="gap: 5px">
                     <button class="btn btn-success" style="width: 100%; margin: 5px" onclick="sendAnswer('REAL')">Реальное</button>
                     <button class="btn btn-danger" style="width: 100%; margin: 5px" onclick="sendAnswer('AI')">ИИ</button>
                 </div>
-
-            </div>
-            <div class="card-footer text-muted text-center">
-                Сделай свой выбор!
             </div>
         </div>
     </div>
