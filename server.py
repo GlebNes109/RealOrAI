@@ -22,7 +22,7 @@ app.register_blueprint(game_bp)
 @app.route('/user_data/<filename>') # эндпоинт для получения файлов (изображений)
 # изображения много весят, поэтому не хранятся в бд. В бд хранится только запись о них (айди и корректный ответ)
 def user_data(filename):
-    return send_from_directory('static/user_data', filename)
+    return send_from_directory('app/static/user_data', filename)
 
 
 if __name__ == '__main__':
