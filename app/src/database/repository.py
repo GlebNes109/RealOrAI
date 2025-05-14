@@ -8,7 +8,7 @@ from app.src.database.db_models import UsersDB, CardsDB
 from app.src.utility_services import create_hash
 
 # DATABASE_URL = settings.postgres_url
-engine = create_engine(settings.postgres_url)
+engine = create_engine(settings.database_url)
 
 
 class Repository:

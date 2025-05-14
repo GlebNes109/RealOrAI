@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     server_host: str
     server_port: str
     yandex_api_token: str
-    postgres_url: str
+    database_url: str
     class Config:
         env_file = ".env"
 
