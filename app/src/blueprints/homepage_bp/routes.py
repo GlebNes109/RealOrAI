@@ -12,5 +12,8 @@ def home():
         user_db = repository.get_user_by_id(user_id)
         if not user_db:
             return redirect(url_for('auth_bp.signin'))
-        return render_template('homepage.html', login=user_db.login)
+        limit = 10
+        scoreboard = repository.get_scoreboard(user_id, limit)
+        print(scoreboard)
+        return render_template('homepage.html', login=user_db.login, scoreboard=scoreboard)
     return redirect(url_for('auth_bp.signin'))

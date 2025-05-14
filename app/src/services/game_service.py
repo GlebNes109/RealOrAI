@@ -31,7 +31,7 @@ class GameService():
                 game_cards_id.append(id)
 
         # 2 изображения из нейросети
-        for _ in range(0):
+        for _ in range(2):
             time.sleep(1)
             id = api.get_ai_image()
             card_db = CardsDB(

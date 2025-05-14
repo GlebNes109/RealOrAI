@@ -122,9 +122,7 @@ class ApiService:
         ]
 
         text = random.choice(prompts)
-
         IAM_TOKEN = self.get_yandex_token(settings.yandex_api_token)
-        text = prompts[random.randint(0, 5)]
         # отправка запроса на генерацию
         generation_url = "https://llm.api.cloud.yandex.net/foundationModels/v1/imageGenerationAsync"
         headers = {

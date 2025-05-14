@@ -7,8 +7,8 @@ from app.src.config import settings
 from app.src.database.db_models import UsersDB, CardsDB
 from app.src.utility_services import create_hash
 
-DATABASE_URL = f"postgresql://{settings.postgres_username}:{settings.postgres_password}@{settings.postgres_host}:{settings.postgres_port}/{settings.postgres_database}"
-engine = create_engine(DATABASE_URL)
+# DATABASE_URL = settings.postgres_url
+engine = create_engine(settings.postgres_url)
 
 
 class Repository:
@@ -99,3 +99,25 @@ class Repository:
             user_db.rating = R_new
             session.commit()
             session.refresh(user_db)
+
+    def get_scoreboard(self, user_id, limit):
+        with Session(engine) as session:
+            query = select(UsersDB).order_by(UsersDB.rating.desc()).limit(limit)
+            users_db = session.exec(query).all()
+            curr_user_db = session.exec(select(UsersDB).where(UsersDB.id == user_id)).first()
+            scoreboard = []
+            flag = False
+            for i in range(len(users_db)):
+                if users_db[i].id == curr_user_db.id:
+                    is_current = True
+                else:
+                    is_current = False
+                if is_current:
+                    flag = True
+                scoreboard.append({'position' : i, 'login': users_db[i].login, 'rating': users_db[i].rating, 'is_current': is_current})
+
+            if not flag:
+                current_player = {'position': -1, 'login': curr_user_db.login, 'rating': curr_user_db.rating, 'is_current': True}
+                scoreboard.append(current_player)
+
+            return scoreboard

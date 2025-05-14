@@ -8,7 +8,7 @@ from app.src.blueprints.game_bp import game_bp
 from app.src.blueprints.homepage_bp import home_bp
 from app.src.database.repository import Repository
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='src/templates') # путь только к базовым шаблонам (навбару и тд)
 app.config['SECRET_KEY'] = settings.secret_key
 app.config['WTF_CSRF_ENABLED'] = True
 csrf = CSRFProtect(app)

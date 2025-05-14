@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head><title>Регистрация</title>
-<link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-        crossorigin="anonymous">
-</head>
-<body class="bg-light">
+{% extends 'base.html' %}
+{% block content %}
   <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="container" style="max-width: 400px;">
       <h2 class="text-center mb-4">Регистрация</h2>
@@ -56,4 +49,5 @@
       </div>
     </div>
   </div>
-</body>
+{% endblock %}
+

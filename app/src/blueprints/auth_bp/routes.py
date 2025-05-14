@@ -30,6 +30,10 @@ def signup():
         if not res:
             flash('Пользователь с таким логином уже существует', 'danger')
         # return redirect(url_for('login'))
+        user = repository.get_user(username, password)
+        if user:
+            session['user_id'] = user.id
+            return redirect(url_for('home_bp.home'))
     return render_template('signup.html', form=form)
 
 @auth_bp.route('/logout')
